@@ -1,13 +1,13 @@
 #include "heads.h"
-int *read_csv(char filepath[], int row, int col)
+int **read_csv(char filepath[], int row)
 {
     FILE *fp;
     // 原始数组
     // 开辟连续二维数组空间
     // *road这个指针为一级指针，但road(road[0])其实是二级指针的地址
-    int(*road)[row] = (int(*)[row])malloc(sizeof(int) * row * col);
+    int(*road)[row] = (int(*)[row])malloc(sizeof(int) * row * row);
     //  一级指针
-    int **p = (int **)road;
+    int **p = (int **)malloc(sizeof(int *) * row);
     fp = fopen(filepath, "r");
     char line[300];
     int i = 0;
@@ -23,15 +23,10 @@ int *read_csv(char filepath[], int row, int col)
         }
         i++;
     }
-    // for (int i = 0; i < row; i++)
-    // {
-    //     for (int j = 0; j < col; j++)
-    //     {
-    //         printf("%d,", road[i][j]);
-    //         //("%d %d", i, j);
-    //     }
-    //     printf("\n");
-    // }
+    for (int i = 0; i < row; i++)
+    {
+        p[i] = road[i];
+    }
     fclose(fp);
     return p;
 }
@@ -101,26 +96,24 @@ void printfname(int i)
     printf("%s", name);
     fclose(fp);
 }
-void write_2csv(char filepath[], int **p, int row, int col)
+void write_2csv(char filepath[], int **road, int row)
 {
-    int(*road)[row] = p;
     FILE *fp = fopen(filepath, "w");
     for (int i = 0; i < row; i++)
     {
-        for (int j = 0; j < col; j++)
+        for (int j = 0; j < row; j++)
             fprintf(fp, "%d,", road[i][j]);
         fprintf(fp, "\n");
     }
     fclose(fp);
 }
-void Floyd(int **p, int row, int col, char file[80])
+void Floyd(int **road, int row, char file[80])
 {
-    int(*road)[row] = p;
-    int(*path)[row] = (int(*)[row])malloc(sizeof(int) * row * col);
+    int(*path)[row] = (int(*)[row])malloc(sizeof(int) * row * row);
     // 初始化path
     for (int i = 0; i < row; i++)
     {
-        for (int j = i; j < col; j++)
+        for (int j = i; j < row; j++)
         {
             path[i][j] = path[j][i] = -1;
         }
@@ -129,7 +122,7 @@ void Floyd(int **p, int row, int col, char file[80])
     {
         for (int i = 0; i < row; i++)
         {
-            for (int j = i; j < col; j++)
+            for (int j = i; j < row; j++)
             {
                 if (road[i][j] > road[i][k] + road[k][j])
                 {
@@ -139,18 +132,22 @@ void Floyd(int **p, int row, int col, char file[80])
             }
         }
     }
-    int **p_path = (int **)path;
+    int **p_path = (int **)malloc(sizeof(int *) * row);
+    for (int i = 0; i < row; i++)
+    {
+        p_path[i] = path[i];
+    }
     char file_inner[80];
     strcpy(file_inner, file);
     strcat(file, "/path.csv");
     strcat(file_inner, "/road.csv");
-    write_2csv(file, p_path, row, col);
-    write_2csv(file_inner, p, row, col);
+    write_2csv(file, p_path, row);
+    write_2csv(file_inner, road, row);
 }
 void printGraphPath(int i, int j, int row)
 {
     char file_path[50] = "G:/college file/out_work/cowander/path.csv";
-    int(*path)[row] = read_csv(file_path, row, row);
+    int **path = read_csv(file_path, row);
     int flag = path[i][j];
     if (path[i][j] != -1)
     {
@@ -164,7 +161,7 @@ void printGraphPath(int i, int j, int row)
     }
     return;
 }
-void find_points_path(int **p, int row)
+void find_points_path(int **road, int row)
 {
     printf("请输入要查询的序号\n输入0 0退出");
     int start = 5, end = 4;
@@ -182,16 +179,65 @@ void find_points_path(int **p, int row)
 void show_min_distance(int i, int j, int row)
 {
     char filepath_road[50] = "G:/college file/out_work/cowander/road.csv";
-    int(*road)[row] = read_csv(filepath_road, row, row);
+    int **road = read_csv(filepath_road, row);
     printf("最短路径长度为%d\n", road[i][j]);
 }
-void printfroad(int **p)
+void printfroad(int **road)
 {
-    int(*road)[12] = p;
     for (int i = 0; i < 12; i++)
     {
         for (int j = 0; j < 12; j++)
             printf("%d", road[i][j]);
         printf("\n");
     }
+}
+int Ater_roads()
+{
+    int row = get_row();
+    char filepath_road_origin[50] = "G:/college file/out_work/cowander/road_origin.csv";
+    int **p = read_csv(filepath_road_origin, row);
+    printf("数值不超过100\t1确认进行修改，任意键返回\n");
+    int method, start, end, lenth;
+    scanf("%d", &method);
+    int max_num = get_row();
+    if (method == 1)
+    {
+        printf("退出按-1,-1,-1。");
+        printf("请依次输入起点、终点序号,以及长度\n");
+        scanf("%d %d %d", &start, &end, &lenth);
+
+        while ((start + 1) | (end + 1) | (lenth + 1))
+        {
+            if ((start - max_num > 0) | (end - max_num > 0))
+            {
+                printf("禁止输入超出景点序号的序号\n");
+            }
+            else if (start - end)
+            {
+                write_2csv(filepath_road_origin, insert_roads(p, start, end, lenth), row);
+            }
+
+            else
+            {
+                printf("禁止修改景点到景点的距离\n");
+            }
+            printf("退出按-1,-1,-1。");
+            printf("请依次输入起点、终点序号,以及长度\n");
+            scanf("%d %d %d", &start, &end, &lenth);
+        }
+        return 0;
+    }
+    else
+    {
+        return 0;
+    }
+}
+int **insert_roads(int **road, int start, int end, int lenth)
+{
+    if (lenth > 100)
+        lenth = 100;
+    else if (lenth <= 0)
+        printf("长度不能为非正数");
+    road[start][end] = road[end][start] = lenth;
+    return road;
 }

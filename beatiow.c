@@ -100,11 +100,9 @@ void init_dowandbeati()
     char file2[] = "G:/college file/out_work/cowander/beati";
     make_beauti(filepath_beati);
     make_shandow(filepath_shandow);
-    int(*road_beati)[MAX] = read_csv(filepath_beati, MAX, MAX);
-    int(*road_shandow)[MAX] = read_csv(filepath_shandow, MAX, MAX);
+    int **road_beati = read_csv(filepath_beati, MAX);
+    int **road_shandow = read_csv(filepath_shandow, MAX);
     int row = get_row();
-    int **p_beati = (int **)road_beati;
-    int **p_shandow = (int **)road_shandow;
-    Floyd(p_shandow, row, row, file1);
-    Floyd(p_beati, row, row, file2);
+    Floyd(road_shandow, row, file1);
+    Floyd(road_beati, row, file2);
 }

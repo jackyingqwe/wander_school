@@ -28,26 +28,31 @@ VIEW *insert_view(VIEW *head);
 VIEW *read_view(char filepath[50]);
 // 修改景点信息的函数入口
 VIEW *alter_view(VIEW *head);
+// 修改景点信息
+VIEW *modefy_view(VIEW *head);
 // 将景点信息的链表写入文件
 int write_view(VIEW *head);
 // 根据绝对路径读取相对应的csv文件
-int *read_csv(char filepath[], int row, int col);
+int **read_csv(char filepath[], int row);
 // 构造最原始的景点之间的路径长度
 // 在图论中称之为边
 int makeroad();
 // 将二维数组写入csv文件
-void write_2csv(char filepath[], int **p, int row, int col);
+void write_2csv(char filepath[], int **road, int row);
 // 运行floyd算法，得到最短路径，并写入csv文件
-void Floyd(int **p, int row, int col, char file[80]);
+void Floyd(int **road, int row, char file[80]);
 int main();
 // 输出菜单
 void printMenu();
 // 选择功能（路线与景点两部分）
-void select_fun(char filepath[]);
+int select_fun(char filepath[]);
+
 // 获取景点个数
 int get_row();
+
 // 展示两点之间最短路径函数入口
-void find_points_path(int **p, int row);
+void find_points_path(int **road, int row);
+
 // 输出最短路径的途径地点
 void printGraphPath(int i, int j, int row);
 // 输出指定位置的景点的名称
@@ -62,8 +67,14 @@ void make_shandow(char filepath[50]);
 // 初始化树荫、漂亮程度的最短路径
 void init_dowandbeati();
 // 检验函数，方便遍历二维数组
-void printfroad(int **p);
+void printfroad(int **road);
 // 根据序号删除景点信息
 VIEW *delete_view_num(VIEW *head, int num);
 // 根据名称删除景点信息
 VIEW *delete_view_name(VIEW *head, char name[30]);
+// 修改路径
+int **insert_roads(int **road, int start, int end, int lenth);
+// 修改路径函数入口
+int Ater_roads();
+// 初始化最短路径
+int **init_road();

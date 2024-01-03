@@ -14,72 +14,99 @@ int get_row()
 }
 void printMenu()
 {
+    char filepath[50] = {"G:/college file/out_work/cowander/view.txt"};
+    VIEW *head = read_view(filepath);
     // 主菜单
-    printf("1欢迎来到西安邮电大学导游咨询系统!\n");
-    printf("查询景点请按1\n");
-    printf("修改景点请按2\n");
-    printf("查询路线请按3\n");
+    printf("欢迎来到西安邮电大学导游咨询系统!\n");
+    show_view(head);
+    printf("\n查询景点请按1\t");
+    printf("修改景点请按2\t");
+    printf("查询路线请按3\t");
     printf("修改路线请按4\n");
-    printf("输入exit退出程序\n\n");
+    printf("输入5退出程序\n\n");
 }
-int *init_road()
+int **init_road()
 {
-    char filepath[50] = "G:/college file/out_work/cowander/view.txt";
-    // 景点简介
     char filepath_path[50] = "G:/college file/out_work/cowander/path.csv";
     // 用户输入的路径
     char filepath_road_origin[50] = "G:/college file/out_work/cowander/road_origin.csv";
-    // 最短路径
-    char filepath_road[50] = "G:/college file/out_work/cowander/road.csv";
     char file[] = "G:/college file/out_work/cowander";
     int row = get_row();
     int col = row;
-    int(*road)[row] = read_csv(filepath_road_origin, row, col);
-    // for (int i = 0; i < 12; i++)
-    // {
-    //     for (int j = 0; j < 10; j++)
-    //         printf("%d", road[i][j]);
-    // }
-    int **p = (int **)road;
-    Floyd(p, row, col, file);
-    return (*road)[row];
+    int **road = read_csv(filepath_road_origin, row);
+    Floyd(road, row, file);
+    return road;
 }
-void select_fun(char filepath[])
+int select_fun(char filepath[])
 {
-    int index = 5;
+    int index = 6;
     scanf("%d", &index);
-    while (index > 4)
+    while (index > 5)
     {
         printf("请重新输入");
         scanf("%d", &index);
     }
     VIEW *head = read_view(filepath);
-    show_view(head);
-
     switch (index)
     {
     case 1:
     {
+        printf("请输入要查询的序号,退出按-1\n");
+        int index = 2;
+        scanf("%d", &index);
+        while (index + 1)
+        {
+            if (index > get_row() | index < -1)
+            {
+                printf("序号超出当前景点最大序号\n重新输入\n");
+            }
+            else
+            {
+                int i = 0;
+                for (VIEW *temp = head->next; temp; temp = temp->next)
+                {
+                    if (i == index)
+                        printf("%s\t%s\n", temp->name, temp->intro);
+                    i++;
+                }
+                printf("请继续输入查询,退出按-1\n");
+            }
+            scanf("%d", &index);
+        }
+        main();
+        free(head);
         break;
     }
     case 2:
     {
-        show_view(head);
         alter_view(head);
+        free(head);
+        main();
         break;
     }
     case 3:
     {
         int **p = (int **)init_road();
         find_points_path(p, get_row());
+        free(head);
+        free(p);
+        main();
         break;
     }
     case 4:
     {
-        init_road();
+        Ater_roads();
+        free(head);
+        main();
+
         break;
     }
+    case 5:
+        free(head);
+        return 0;
     default:
+        free(head);
+        main();
         break;
     }
 }
