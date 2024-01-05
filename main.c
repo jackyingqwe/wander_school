@@ -10,6 +10,6 @@ int main()
     // 初始化道路
     // makeroad();
     // 初始化美景
-    //  init_dowandbeati();
+    // init_dowandbeati();
     return 0;
 }

@@ -106,3 +106,4 @@ void init_dowandbeati()
     Floyd(road_shandow, row, file1);
     Floyd(road_beati, row, file2);
 }
+

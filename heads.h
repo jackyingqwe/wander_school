@@ -51,15 +51,15 @@ int select_fun(char filepath[]);
 int get_row();
 
 // 展示两点之间最短路径函数入口
-void find_points_path(int **road, int row);
+void find_points_path(int **road, int row, char file_path[80]);
 
 // 输出最短路径的途径地点
-void printGraphPath(int i, int j, int row);
+void printGraphPath(int i, int j, int row, char file_path[50]);
 // 输出指定位置的景点的名称
 void printfname(int i);
 // 展示最短路径的长度
 // 在图论中称之为边
-void show_min_distance(int i, int j, int row);
+void show_min_distance(int i, int j, int row, char filepath_road[80]);
 // 构造最原始的景点的漂亮程度权重
 void make_beauti(char filepath[50]);
 // 构造最原始的路径阴影权重
@@ -77,4 +77,8 @@ int **insert_roads(int **road, int start, int end, int lenth);
 // 修改路径函数入口
 int Ater_roads();
 // 初始化最短路径
-int **init_road();
+int **init_road(char filepath_road_origin[80], char file[50]);
+
+// 选择查询的类型
+int chose_way();
+char *show_filepath(int index, int order);

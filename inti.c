@@ -25,12 +25,8 @@ void printMenu()
     printf("修改路线请按4\n");
     printf("输入5退出程序\n\n");
 }
-int **init_road()
+int **init_road(char filepath_road_origin[80], char file[50])
 {
-    char filepath_path[50] = "G:/college file/out_work/cowander/path.csv";
-    // 用户输入的路径
-    char filepath_road_origin[50] = "G:/college file/out_work/cowander/road_origin.csv";
-    char file[] = "G:/college file/out_work/cowander";
     int row = get_row();
     int col = row;
     int **road = read_csv(filepath_road_origin, row);
@@ -86,8 +82,9 @@ int select_fun(char filepath[])
     }
     case 3:
     {
-        int **p = (int **)init_road();
-        find_points_path(p, get_row());
+        int index = chose_way();
+        int **p = (int **)init_road(show_filepath(index, 0), show_filepath(0, index));
+        find_points_path(p, get_row(), show_filepath(0, index));
         free(head);
         free(p);
         main();
@@ -98,7 +95,6 @@ int select_fun(char filepath[])
         Ater_roads();
         free(head);
         main();
-
         break;
     }
     case 5:
@@ -108,5 +104,60 @@ int select_fun(char filepath[])
         free(head);
         main();
         break;
+    }
+}
+
+int chose_way()
+{
+    int index = 5;
+    while (index > 3)
+    {
+        printf("查询最短路径按1\t最漂亮的路按2\t树荫最多的路按3\n");
+        scanf("%d", &index);
+    }
+    return index;
+}
+// 前面一个返回origin——road，后面是子目录
+char *show_filepath(int index, int order)
+{
+    // 用户输入的路径
+    char *filepath_road_origin, *file;
+    filepath_road_origin = (char *)malloc(sizeof(char) * 80);
+    strcpy(filepath_road_origin, "G:/college file/out_work/cowander/road_origin.csv");
+    file = (char *)malloc(sizeof(char) * 50);
+    strcpy(file, "G:/college file/out_work/cowander");
+    if (index)
+    {
+        switch (index)
+        {
+        case 2:
+            strcpy(filepath_road_origin, "G:/college file/out_work/cowander/beati/beati_origin.csv");
+            return filepath_road_origin;
+            break;
+        case 3:
+            strcpy(filepath_road_origin, "G:/college file/out_work/cowander/shandow/shandow_origin.csv");
+            return filepath_road_origin;
+            break;
+        default:
+            return filepath_road_origin;
+            break;
+        }
+    }
+    else
+    {
+        switch (order)
+        {
+        case 2:
+            strcpy(file, "G:/college file/out_work/cowander/beati");
+            return file;
+            break;
+        case 3:
+            strcpy(file, "G:/college file/out_work/cowander/shandow");
+            return file;
+            break;
+        default:
+            return file;
+            break;
+        }
     }
 }

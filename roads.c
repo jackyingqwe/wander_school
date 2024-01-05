@@ -144,15 +144,14 @@ void Floyd(int **road, int row, char file[80])
     write_2csv(file, p_path, row);
     write_2csv(file_inner, road, row);
 }
-void printGraphPath(int i, int j, int row)
+void printGraphPath(int i, int j, int row, char file_path[50])
 {
-    char file_path[50] = "G:/college file/out_work/cowander/path.csv";
     int **path = read_csv(file_path, row);
     int flag = path[i][j];
     if (path[i][j] != -1)
     {
-        printGraphPath(i, path[i][j], row);
-        printGraphPath(path[i][j], j, row);
+        printGraphPath(i, path[i][j], row, file_path);
+        printGraphPath(path[i][j], j, row, file_path);
     }
     else
     {
@@ -161,24 +160,27 @@ void printGraphPath(int i, int j, int row)
     }
     return;
 }
-void find_points_path(int **road, int row)
+void find_points_path(int **road, int row, char file_path[80])
 {
+    char file1[80];
+    strcpy(file1, file_path);
+    strcat(file_path, "/path.csv");
+    strcat(file1, "/road.csv");
     printf("请输入要查询的序号\n输入0 0退出");
     int start = 5, end = 4;
     scanf("%d %d", &start, &end);
     while (start | end)
     {
         printf("\n最短路径为：\n");
-        printGraphPath(start, end, row);
+        printGraphPath(start, end, row, file_path);
         printfname(end);
-        show_min_distance(start, end, row);
+        show_min_distance(start, end, row, file1);
         printf("\n再次输入查询\n");
         scanf("%d %d", &start, &end);
     }
 }
-void show_min_distance(int i, int j, int row)
+void show_min_distance(int i, int j, int row, char filepath_road[80])
 {
-    char filepath_road[50] = "G:/college file/out_work/cowander/road.csv";
     int **road = read_csv(filepath_road, row);
     printf("最短路径长度为%d\n", road[i][j]);
 }
@@ -194,8 +196,7 @@ void printfroad(int **road)
 int Ater_roads()
 {
     int row = get_row();
-    char filepath_road_origin[50] = "G:/college file/out_work/cowander/road_origin.csv";
-    int **p = read_csv(filepath_road_origin, row);
+    int **p = read_csv(show_filepath(1, 0), row);
     printf("数值不超过100\t1确认进行修改，任意键返回\n");
     int method, start, end, lenth;
     scanf("%d", &method);
@@ -208,13 +209,13 @@ int Ater_roads()
 
         while ((start + 1) | (end + 1) | (lenth + 1))
         {
-            if ((start - max_num > 0) | (end - max_num > 0))
+            if ((start - max_num >= 0) | (end - max_num >= 0))
             {
                 printf("禁止输入超出景点序号的序号\n");
             }
             else if (start - end)
             {
-                write_2csv(filepath_road_origin, insert_roads(p, start, end, lenth), row);
+                write_2csv(show_filepath(1, 0), insert_roads(p, start, end, lenth), row);
             }
 
             else
