@@ -71,8 +71,7 @@ int makeroad()
     //         printf("%d ", road[i][j]);
     //     printf("\n");
     // }
-    char filepath[50] = "G:/college file/out_work/cowander/road_origin.csv";
-    FILE *fp = fopen(filepath, "w");
+    FILE *fp = fopen(show_filepath(1, 0), "w");
     for (int i = 0; i < MAX; i++)
     {
         for (int j = 0; j < MAX; j++)
@@ -83,10 +82,9 @@ int makeroad()
 }
 void printfname(int i)
 {
-    char file_view[50] = "G:/college file/out_work/cowander/view.txt";
     char name[20];
     FILE *fp;
-    fp = fopen(file_view, "r");
+    fp = fopen(show_filepath(4, 0), "r");
     int ii = -1;
     while (ii != i)
     {
@@ -171,7 +169,7 @@ void find_points_path(int **road, int row, char file_path[80])
     scanf("%d %d", &start, &end);
     while (start | end)
     {
-        printf("\n最短路径为：\n");
+        printf("\n最佳路径为：\n");
         printGraphPath(start, end, row, file_path);
         printfname(end);
         show_min_distance(start, end, row, file1);
@@ -182,7 +180,7 @@ void find_points_path(int **road, int row, char file_path[80])
 void show_min_distance(int i, int j, int row, char filepath_road[80])
 {
     int **road = read_csv(filepath_road, row);
-    printf("最短路径长度为%d\n", road[i][j]);
+    printf("\n最佳路径权重为%d\n", road[i][j]);
 }
 void printfroad(int **road)
 {

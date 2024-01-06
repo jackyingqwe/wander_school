@@ -38,9 +38,7 @@ void show_view(VIEW *head)
 }
 int write_view(VIEW *head)
 {
-    // 输出文件绝对路径
-    char filepath[50] = {"G:/college file/out_work/cowander/view.txt"};
-    FILE *fp = fopen(filepath, "w");
+    FILE *fp = fopen(show_filepath(4, 0), "w");
     head = head->next;
     int i = 0;
     for (VIEW *temp = head; temp; temp = temp->next)

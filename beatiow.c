@@ -49,8 +49,9 @@ void make_beauti(char filepath[50])
 // 树荫
 void make_shandow(char filepath[50])
 {
-    // 边初始化
-    int road[MAX][MAX] = {[0 ...(MAX - 1)][0 ...(MAX - 1)] = 100};
+    // 没有树荫为500
+    //  边初始化
+    int road[MAX][MAX] = {[0 ...(MAX - 1)][0 ...(MAX - 1)] = 500};
     road[0][1] = 2;
     road[0][3] = 10;
     road[1][2] = 8;
@@ -78,8 +79,8 @@ void make_shandow(char filepath[50])
         {
             if (i == j)
                 road[i][j] = road[j][i] = 0;
-            else
-                road[j][i] = road[i][j];
+            else if (road[i][j] < 20)
+                road[j][i] = road[i][j] = 20 - road[i][j];
         }
     }
     FILE *fp = fopen(filepath, "w");
@@ -94,16 +95,11 @@ void make_shandow(char filepath[50])
 
 void init_dowandbeati()
 {
-    char filepath_beati[80] = "G:/college file/out_work/cowander/beati/beati_origin.csv";
-    char filepath_shandow[80] = "G:/college file/out_work/cowander/shandow/shandow_origin.csv";
-    char file1[] = "G:/college file/out_work/cowander/shandow";
-    char file2[] = "G:/college file/out_work/cowander/beati";
-    make_beauti(filepath_beati);
-    make_shandow(filepath_shandow);
-    int **road_beati = read_csv(filepath_beati, MAX);
-    int **road_shandow = read_csv(filepath_shandow, MAX);
+    make_beauti(show_filepath(2, 0));
+    make_shandow(show_filepath(3, 0));
+    int **road_beati = read_csv(show_filepath(2, 0), MAX);
+    int **road_shandow = read_csv(show_filepath(3, 0), MAX);
     int row = get_row();
-    Floyd(road_shandow, row, file1);
-    Floyd(road_beati, row, file2);
+    Floyd(road_shandow, row, show_filepath(0, 3));
+    Floyd(road_beati, row, show_filepath(0, 2));
 }
-

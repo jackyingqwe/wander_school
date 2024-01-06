@@ -138,6 +138,10 @@ char *show_filepath(int index, int order)
             strcpy(filepath_road_origin, "G:/college file/out_work/cowander/shandow/shandow_origin.csv");
             return filepath_road_origin;
             break;
+        case 4:
+            strcpy(filepath_road_origin, "G:/college file/out_work/cowander/view.txt");
+            return filepath_road_origin;
+            break;
         default:
             return filepath_road_origin;
             break;
