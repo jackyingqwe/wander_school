@@ -216,7 +216,7 @@ VIEW *modefy_view(VIEW *head)
     if (method == 1)
     {
         char name[40];
-        printf("请输入新的名称");
+        printf("请输入新的名称\n");
         scanf("%s", name);
         int i = 0;
         for (VIEW *temp = head->next; temp; temp = temp->next)
@@ -230,7 +230,7 @@ VIEW *modefy_view(VIEW *head)
     else if (method == 2)
     {
         char intro[100];
-        printf("请输入新的介绍");
+        printf("请输入新的介绍\n");
         scanf("%s", intro);
         int i = 0;
         for (VIEW *temp = head->next; temp; temp = temp->next)
